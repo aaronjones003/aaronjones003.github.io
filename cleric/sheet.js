@@ -15,6 +15,37 @@ function on_set_movement()
 	t.children[8].children[2].children[0].value = Math.floor(m * 5);
 }
 
+function on_set_thac()
+{
+
+	let base = document.getElementById("thac0-input");
+	let thac0 = parseInt(base.value);
+	let tr = base.parentElement.parentElement.parentElement;
+	console.log(tr);
+	Array.from(tr.children).forEach((td, i) => {
+		// Skip first cell and input cell
+		if (i === 0 || i === 11) return;
+		td.children[0].innerHTML = thac0 - (11 - i);
+	});
+}
+
+function on_set_level()
+{
+
+	let levelInput = document.getElementById("level-input");
+	let turningLevel = parseInt(levelInput.value);
+	let turningContainer = document.getElementById("turning");
+	console.log(turningContainer)
+	let turningRow = turningContainer.children[0].children[0].children[0];
+	console.log(turningRow)
+	Array.from(turningRow.children).forEach((td, i) => {
+		if (turningLevel > turningTable.length) {
+			turningLevel = turningTable.length;
+		}
+		td.children[0].value = turningTable[turningLevel - 1][i];
+	});
+}
+
 function find_owner(e)
 {
 	if (e == null) return null;
@@ -429,6 +460,22 @@ m_charisma =
 	['45', '+20', '+13'],
 	['50', '+20', '+14'],
 ];
+const turningTable = [
+	[10, 13, 16, 19, 20, "-", "-", "-", "-", "-", "-", "-", "-"],
+	[7, 10, 13, 16, 19, 20, "-", "-", "-", "-", "-", "-", "-"],
+	[4, 7, 10, 13, 16, 19, 20, "-", "-", "-", "-", "-", "-"],
+	["T", 4, 7, 10, 13, 16, 19, 20, "-", "-", "-", "-", "-"],
+	["T", "T", 4, 7, 10, 13, 16, 19, 20, "-", "-", "-", "-"],
+	["D", "T", "T", 4, 7, 10, 13, 16, 19, 20, "-", "-", "-"],
+	["D", "D", "T", "T", 4, 7, 10, 13, 16, 19, 20, "-", "-"],
+	["D*", "D", "D", "T", "T", 4, 7, 10, 13, 16, 19, 20, "-"],
+	["D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13, 16, 19, 20],
+	["D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13, 16, 19],
+	["D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13, 16, 19],
+	["D*", "D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13, 16],
+	["D*", "D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13, 16],
+	["D*", "D*", "D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13]
+]
 function update_from_data(inputs, data)
 {
 	for (let i=0; i<data.length; i++)
@@ -603,7 +650,7 @@ function update_font()
 {
 	let list = document.getElementById("font-selector");
 	let font = list.value;
-	if (font == "Default") font = "Indie Flower";
+	if (font == "Default") font = "Handlee";
 	set_font(font);
 	hide_font_selector();
 }
@@ -690,10 +737,10 @@ window.onload = function()
 	}
 
 	show_instructions();
-//	m_hide_instrunction_timeout = setTimeout(() =>
-//	{
-//		hide_instructions();
-//	}, 5000);
+	m_hide_instrunction_timeout = setTimeout(() =>
+	{
+		hide_instructions();
+	}, 5000);
 	
 	update_tabindex();
 

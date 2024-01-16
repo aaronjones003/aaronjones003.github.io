@@ -670,6 +670,45 @@ div.input
 	resize: none;
 	font-size: 12pt;
 }
+#thac
+{
+	float: left;
+	width: 100%;
+	margin-top: 0.5cm;
+}
+
+#thac table
+{
+	width: 100%;
+	border-collapse: collapse;
+}
+#thac td
+{
+	border: 1pt solid black;
+	text-align: center;
+	height: 9.5pt;
+}
+#thac td:not(:first-child)
+{
+	border: 1pt solid black;
+	text-align: center;
+	height: 9.5pt;
+	width: 0.7cm;
+}
+#thac td:nth-child(12)
+{
+	border: 1.5pt solid black;
+}
+#thac input[type=text]
+{
+	box-sizing: border-box;
+	font-size: 10pt;
+	height: 11pt;
+	width: 100%;
+	border: 0;
+	text-align: center;
+	transform: translate(0, 0.25mm);
+}
 #weapons
 {
 	float: left;
@@ -806,7 +845,7 @@ div.input
 	height: 0.6cm;
 //	border-radius: 1cm;
 	box-sizing: border-box;
-	font-size: 16pt;
+	font-size: 12pt;
 	border: 0;
 	border-bottom: 1pt solid black;
 	text-align: center;
@@ -884,7 +923,8 @@ div.input
 #proficiencies
 {
 	float: right;
-	width: 49%;
+	/* width: 49%; */
+	width: 100%;
 	margin-top: 0.5cm;
 	border: 1pt solid black;
 	height: 3.5cm;
@@ -944,7 +984,7 @@ div.input
 	width: 0.6cm;
 	text-align: center;
 }
-#proficiencies td:nth-child(2) input:nth-child(1)
+#proficiencies td:nth-child(4) input:nth-child(1)
 {
 	width: 4.2cm;
 }
@@ -1453,7 +1493,7 @@ X:before
     text-align: center;
     transform: rotate(-90deg);
     left: -6pt;
-    top: 475pt;
+    top: 450pt;
 }
 #help-ability-checks
 {

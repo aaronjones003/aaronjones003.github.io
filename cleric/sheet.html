@@ -81,7 +81,7 @@
 			<table>
 				<tr><td colspan=2><div class='input'><label>Name</label><div><input type=text id="character-name"></input></div></div></td></tr>
 				<tr><td><div class='input'><label>Alignment</label><div><input type='text'/></div></div></td><td><div class='input'><label>Race</label><div><input type='text'/></div></div></td></tr>
-				<tr><td><div class='input'><label>Class</label><div><input type='text'/></div></div></td><td><div class='input'><label>Level</label><div><input type='text'/></div></div></td></tr>
+				<tr><td><div class='input'><label>Class</label><div><input type='text' value="Cleric"/></div></div></td><td><div class='input'><label>Level</label><div><input type='text' id="level-input" onchange="on_set_level();"/></div></div></td></tr>
 			</table>
 		</div>
 		<div id="logo">
@@ -199,6 +199,61 @@
 				<tr><td><input type='text'/></td><td><textarea></textarea></td></tr>
 			</table>
 		</div>
+		<div id="thac">
+			<table>
+				<thead>
+					<tr>
+						<th>Target's AC</th>
+						<th>10</th>
+						<th>9</th>
+						<th>8</th>
+						<th>7</th>
+						<th>6</th>
+						<th>5</th>
+						<th>4</th>
+						<th>3</th>
+						<th>2</th>
+						<th>1</th>
+						<th>0</th>
+						<th>-1</th>
+						<th>-2</th>
+						<th>-3</th>
+						<th>-4</th>
+						<th>-5</th>
+						<th>-6</th>
+						<th>-7</th>
+						<th>-8</th>
+						<th>-9</th>
+						<th>-10</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><div>To Hit #</div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div><input id="thac0-input" type='text' onchange="on_set_thac();"/></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+						<td><div></div></td>
+				</tbody>
+			</table>
+		</div>
 		<div id="weapons">
 			<table>
 				<thead>
@@ -311,7 +366,7 @@
 				</tr>
 			</table>
 		</div>
-		<div id="special-abilities">
+		<!-- <div id="special-abilities">
 			<table vertical-tabindex>
 				<thead>
 					<tr><th colspan=2>Special abilities</th></tr>
@@ -326,20 +381,20 @@
 					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></tr>
 				</tbody>
 			</table>
-		</div>
+		</div> -->
 		<div id="proficiencies">
 			<table vertical-tabindex>
 				<thead>
-					<tr><th>Non-weapon proficiencies</th><th>Weapon proficiencies</th></tr>
+					<tr><th>Non-weapon proficiencies</th><th>Non-weapon proficiencies</th><th>Non-weapon proficiencies</th><th>Weapon proficiencies</th></tr>
 				</thead>
 				<tbody>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
 				</tbody>
 			</table>
 		</div>
