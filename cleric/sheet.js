@@ -1,6 +1,8 @@
-m_hide_instrunction_timeout = null;
+import priestSpells from "./priest-spells.js";
 
-function on_set_movement()
+let mHideInstructionTimeout = null;
+
+function onSetMovement()
 {
 	let base = document.getElementById("base-movement");
 	let m = parseInt(base.value);
@@ -15,7 +17,7 @@ function on_set_movement()
 	t.children[8].children[2].children[0].value = Math.floor(m * 5);
 }
 
-function on_set_thac()
+function onSetThac()
 {
 
 	let base = document.getElementById("thac0-input");
@@ -29,7 +31,7 @@ function on_set_thac()
 	});
 }
 
-function on_set_level()
+function onSetLevel()
 {
 
 	let levelInput = document.getElementById("level-input");
@@ -46,26 +48,82 @@ function on_set_level()
 	});
 }
 
-function find_owner(e)
+function addSpellsForSphere(spellsByLevel, existingSpells, sphere, major) {
+	priestSpells.forEach(spell => {
+		if (existingSpells.has(spell.spellName)) return;
+
+		if (spell.sphere === sphere.trim().toUpperCase() && (major || (spell.spellLevel <= 3))) {
+			if (spellsByLevel[spell.spellLevel]) {
+				spellsByLevel[spell.spellLevel].push(spell);
+				existingSpells.add(spell.spellName);
+			} else {
+				spellsByLevel[spell.spellLevel] = [spell];
+				existingSpells.add(spell.spellName);
+			}
+		}
+	})
+}
+
+function onSetSpheres()
+{
+	let majorInput = document.getElementById("major-spheres-input");
+	let majorSpheres = majorInput.value ? majorInput.value.split(',') : [];
+	let minorInput = document.getElementById("minor-spheres-input");
+	let minorSpheres = minorInput.value ? minorInput.value.split(',') : [];
+	const spellsByLevel = {}
+	const existingSpells = new Set();
+
+	majorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, true));
+	minorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, false));
+	console.log(spellsByLevel);
+
+	const spellsList = Object.values(spellsByLevel).flatMap(values => values)
+
+	console.log(spellsList);
+
+	let spells = document.getElementById("spell-list");
+	let rows = spells.querySelectorAll("tbody tr");
+	const numRows = rows.length - 1
+	Array.from(rows).slice(1).forEach((row, i) => {
+		console.log(row)
+		if (spellsList[i]) {
+
+			row.children[0].children[0].children[0].value = spellsList[i].spellName.toLowerCase();
+			row.children[1].children[0].children[0].value = spellsList[i].spellLevel;
+			row.children[4].children[0].children[0].checked = spellsList[i].components.includes('V');
+			row.children[5].children[0].children[0].checked = spellsList[i].components.includes('S');
+			row.children[6].children[0].children[0].checked = spellsList[i].components.includes('M');
+		}
+		if (spellsList[i + numRows]) {
+			row.children[7].children[0].children[0].value = spellsList[i + numRows].spellName.toLowerCase();
+			row.children[8].children[0].children[0].value = spellsList[i + numRows].spellLevel;
+			row.children[11].children[0].children[0].checked = spellsList[i].components.includes('V');
+			row.children[12].children[0].children[0].checked = spellsList[i].components.includes('S');
+			row.children[13].children[0].children[0].checked = spellsList[i].components.includes('M');
+		}
+	})
+}
+
+function findOwner(e)
 {
 	if (e == null) return null;
 	if (e.id != null && e.id.length > 0) return e;
 	
-	return find_owner(e.parentElement);
+	return findOwner(e.parentElement);
 }
 
-function show_instructions()
+function showInstructions()
 {
 	let instructions = document.getElementById("instructions");
 	instructions.classList.remove("hidden")
 }
 
-function hide_instructions()
+function hideInstructions()
 {
-	if (m_hide_instrunction_timeout != null)
+	if (mHideInstructionTimeout != null)
 	{
-		clearTimeout(m_hide_instrunction_timeout);
-		m_hide_instrunction_timeout = null;
+		clearTimeout(mHideInstructionTimeout);
+		mHideInstructionTimeout = null;
 	}
 
 	let instructions = document.getElementById("instructions");
@@ -84,7 +142,7 @@ function save()
         
         if (input.classList.contains("non-serialized")) continue;
                 
-		let owner = find_owner(input);
+		let owner = findOwner(input);
 		let id = owner.id;
 		if (owner != input)
 		{
@@ -131,7 +189,7 @@ function load(file)
 	let data = file.data
 
     // Reset portrait
-    set_image(document.getElementById("portrait-image"), "");
+    setImage(document.getElementById("portrait-image"), "");
 	
 	if (version >= 3)
 	{
@@ -171,7 +229,7 @@ function load(file)
 		}
 		else if (element.nodeName == "IMG")
 		{
-            set_image(element, value);
+            setImage(element, value);
 		}
 		else
 		{
@@ -179,30 +237,30 @@ function load(file)
 		}
 	}	
 
-	hide_instructions();
-    update_gear_weight();
+	hideInstructions();
+    updateGearWeight();
 }
 
-function close_modal(e)
-{
-	let bg = document.getElementById("modal-bg")
-	bg.style.display = 'none'
-}
+// function closeModal(e)
+// {
+// 	let bg = document.getElementById("modal-bg")
+// 	bg.style.display = 'none'
+// }
 
-function on_drag_enter(e)
+function onDragEnter(e)
 {
 	e.preventDefault()
 	e.stopPropagation()
 }
-function on_drag_leave(e)
+function onDragLeave(e)
 {
 	e.preventDefault();
 	e.stopPropagation();
 }
 
-function on_drop(e)
+function onDrop(e)
 {
-	on_drag_leave(e);
+	onDragLeave(e);
 	
 	e.preventDefault()
 	e.stopPropagation()
@@ -218,7 +276,7 @@ function on_drop(e)
     reader.readAsText(blob)
 }
 
-function get_num_cols(table)
+function getNumCols(table)
 {
 	let cols = 0;
 	let cells = table.rows[0].cells;
@@ -231,7 +289,7 @@ function get_num_cols(table)
 	return cols;
 }
 
-function update_tabindex()
+function updateTabindex()
 {
 	let inputs = document.querySelectorAll("input, textarea");
 	let ordered = new Array(inputs.length);
@@ -262,7 +320,7 @@ function update_tabindex()
 		let index = table.querySelector("input, textarea").tabIndex;
 		let grouping = parseInt(table.getAttribute("vertical-tabindex"));
 		if (isNaN(grouping)) grouping = 1;		
-		let cols = get_num_cols(table);
+		let cols = getNumCols(table);
 		for (let cc=0; cc<cols; cc+=grouping)
 		{
 			let c = (reverse) ? cols-cc-grouping : cc;
@@ -285,7 +343,7 @@ function update_tabindex()
 	}
 }
 
-m_strength =
+let mStrength =
 [
 	['-5', '-4',  '1 lb',   '3 lb',  '1',  '0%'],
 	['-3', '-2',  '1 lb',   '5 lb',  '1',  '0%'],
@@ -320,7 +378,7 @@ m_strength =
 	['+6', '+12', '1,235 lb', '1,440 lb', '19(17)', '95%'],
 	['+7', '+14', '1,535 lb', '1,750 lb', '19(18)', '99%'],
 ];
-m_dexterity =
+let mDexterity =
 [
 	['-6', '-6', '+5'],
 	['-4', '-4', '+5'],
@@ -348,7 +406,7 @@ m_dexterity =
 	['+5', '+5', '-6'],
 	['+5', '+5', '-6'],
 ];
-m_constitution =
+let mConstitution =
 [
 	[    '-3',  '25%',  '30%', '-2', '-'],
 	[    '-2',  '30%',  '35%', '-1', '-'],
@@ -376,7 +434,7 @@ m_constitution =
 	['+2(+7)',  '99%', '100%', '+3', '1/2 turns'],
 	['+2(+7)', '100%', '100%', '+4', '1/1 turns'],
 ];
-m_intelligence =
+let mIntelligence =
 [
 	[ '0',   '-',    '-',   '-', '-'],
 	[ '1',   '-',    '-',   '-', '-'],
@@ -404,7 +462,7 @@ m_intelligence =
 	['15', '9th', '100%', 'All', '6th-lvl illusions'],
 	['20', '9th', '100%', 'All', '7th-lvl illusions'],
 ];
-m_wisdom =
+let mWisdom =
 [
 	['-6', '-', '80%', '-'],
 	['-4', '-', '60%', '-'],
@@ -432,7 +490,7 @@ m_wisdom =
 	['+4', '1 1 1 2 2 2 3 3 4 4 4 4 5 5 5 5 6 6', '0%', 'Cause fear, Charm person, Command, Friends, Hypnotism, Forget, Hold Person, Ray of enfeeblement, Scare, Fear, Charm monster, Confusion, Emotion, Fumble, Suggestion, Chaos, Feeblemind, Hold monster, Magic jar, Quest, Geas, Mass suggestion, Rod of rulership'],
 	['+4', '1 1 1 2 2 2 3 3 4 4 4 4 5 5 5 5 6 6 6 7', '0%', 'Cause fear, Charm person, Command, Friends, Hypnotism, Forget, Hold Person, Ray of enfeeblement, Scare, Fear, Charm monster, Confusion, Emotion, Fumble, Suggestion, Chaos, Feeblemind, Hold monster, Magic jar, Quest, Geas, Mass suggestion, Rod of rulership, Antipathy/sympathy, Death spell, Mass charm'],
 ];
-m_charisma =
+let mCharisma =
 [
 	[ '0',  '-8', '-7'],
 	[ '1',  '-7', '-6'],
@@ -476,14 +534,14 @@ const turningTable = [
 	["D*", "D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13, 16],
 	["D*", "D*", "D*", "D*", "D*", "D", "D", "T", "T", 4, 7, 10, 13]
 ]
-function update_from_data(inputs, data)
+function updateFromData(inputs, data)
 {
 	for (let i=0; i<data.length; i++)
 	{
 		inputs[i].value = data[i];
 	}
 }
-function update_strength(e)
+function updateStrength(e)
 {
 	let value = e.target.value.toString();
 	let percentage = '0';
@@ -498,16 +556,16 @@ function update_strength(e)
 	let data = null;
 	if (value == 18)
 	{
-		if (percentage == 0) data = m_strength[18-1][0];
-		else if (percentage <= 50) data = m_strength[18-1][1];
-		else if (percentage <= 75) data = m_strength[18-1][2];
-		else if (percentage <= 90) data = m_strength[18-1][3];
-		else if (percentage <= 99) data = m_strength[18-1][4];
-		else data = m_strength[18-1][5];
+		if (percentage == 0) data = mStrength[18-1][0];
+		else if (percentage <= 50) data = mStrength[18-1][1];
+		else if (percentage <= 75) data = mStrength[18-1][2];
+		else if (percentage <= 90) data = mStrength[18-1][3];
+		else if (percentage <= 99) data = mStrength[18-1][4];
+		else data = mStrength[18-1][5];
 	}
 	else if (value >= 1 && value <= 25)
 	{
-		data = m_strength[value-1];
+		data = mStrength[value-1];
 	}
 	
 	if (data == null) return;
@@ -518,17 +576,17 @@ function update_strength(e)
 		inputs[i].value = data[i];
 	}
 }
-function update_ability(e)
+function updateAbility(e)
 {
 	let data_table = null;
 	switch (e.target.parentElement.parentElement.children[1].innerText)
 	{
-		case 'STR': return update_strength(e);
-		case 'DEX': data_table = m_dexterity; break;
-		case 'CON': data_table = m_constitution; break;
-		case 'INT': data_table = m_intelligence; break;
-		case 'WIS': data_table = m_wisdom; break;
-		case 'CHA': data_table = m_charisma; break;
+		case 'STR': return updateStrength(e);
+		case 'DEX': data_table = mDexterity; break;
+		case 'CON': data_table = mConstitution; break;
+		case 'INT': data_table = mIntelligence; break;
+		case 'WIS': data_table = mWisdom; break;
+		case 'CHA': data_table = mCharisma; break;
 	}
 
 	let data = null;
@@ -547,7 +605,7 @@ function update_ability(e)
 	}
 }
 
-function update_gear_weight()
+function updateGearWeight()
 {
 	let gear = document.getElementById("gear");
 	let weights = gear.querySelectorAll("td:nth-child(3) input");
@@ -580,7 +638,7 @@ function memorize(e)
 	e.preventDefault();
 }
 
-function update_spell_list_mode()
+function updateSpellListMode()
 {
 	let edit = document.getElementById("spell-list-edit").checked;
 	let spells = document.getElementById("spell-list");
@@ -609,7 +667,7 @@ function update_spell_list_mode()
 	}
 }
 
-function update_printer_friendly(e)
+function updatePrinterFriendly(e)
 {
 	let pf = e.target.checked;
 	let pages = document.querySelectorAll(".page");
@@ -627,49 +685,49 @@ function update_printer_friendly(e)
 	}
 }
 
-function update_player_aid(e)
+function updatePlayerAid(e)
 {
 	let show_player_aid = e.target.checked;
     let player_aid = document.getElementById("player-aid");
     player_aid.style.display = (show_player_aid) ? "block" : "none";
 }
 
-function show_font_selector()
+function showFontSelector()
 {
 	let list = document.getElementById("font-list");
 	list.classList.add('visible');
 }
 
-function hide_font_selector()
+function hideFontSelector()
 {
 	let list = document.getElementById("font-list");
 	list.classList.remove('visible');
 }
 
-function update_font()
+function updateFont()
 {
 	let list = document.getElementById("font-selector");
 	let font = list.value;
 	if (font == "Default") font = "Handlee";
-	set_font(font);
-	hide_font_selector();
+	setFont(font);
+	hideFontSelector();
 }
 
-function set_font(font)
+function setFont(font)
 {
 	let r = document.querySelector(":root");
 	r.style.setProperty('--font', font)
 }
 
-function change_pencil_colour(e)
+function changePencilColor(e)
 {
 	let c = document.getElementById('pencil-colour');
 	let r = document.querySelector(":root");
 	r.style.setProperty('--colour', c.value)
 }
 
-g_modal_callback = null
-function close_modal(e)
+let gModalCallback = null
+function closeModal(e)
 {
 	var modals = document.querySelectorAll(".modal")
 	for (var m=0; m<modals.length; m++)
@@ -678,15 +736,15 @@ function close_modal(e)
 	}
 	var bg = document.getElementById("modal-bg")
 	bg.style.display = 'none'
-	if (g_modal_callback != null)
+	if (gModalCallback != null)
 	{
-		g_modal_callback()
-		g_modal_callback = null
+		gModalCallback()
+		gModalCallback = null
 	}
 }
-function show_modal(id, left, top, callback)
+function showModal(id, left, top, callback)
 {
-	g_modal_callback = callback
+	gModalCallback = callback
 	var bg = document.getElementById("modal-bg")
 	bg.style.display = 'block'
 	var modal = document.getElementById(id)
@@ -699,7 +757,7 @@ function show_modal(id, left, top, callback)
 		modal.querySelector("input").select()
 	}
 }
-function set_image(img, url)
+function setImage(img, url)
 {
     img.src = url
     img.setAttribute("data-x", 0)
@@ -708,14 +766,14 @@ function set_image(img, url)
     img.style.transform = 'translate(0, 0) scale(1)'    
     img.style.display = (url == "") ? "none" : "block";
 }
-function change_image_url(e)
+function changeImageURL(e)
 {
 	var url = document.querySelector("#url-modal input")
 	var img = e.target.parentElement.querySelector("img")
 	url.value = img.src
-	show_modal("url-modal", e.pageX, e.pageY, function()
+	showModal("url-modal", e.pageX, e.pageY, function()
 	{
-        set_image(img, url.value)
+        setImage(img, url.value)
 	})
 }
 
@@ -732,20 +790,42 @@ window.onload = function()
 	
 	document.onclick = (e) =>
 	{
-		if (e.target.id != "instructions" && e.target.id != "show-instructions") hide_instructions();
-		if (e.path && !e.path.some(o => o.id == "font-selection")) hide_font_selector();
+		if (e.target.id != "instructions" && e.target.id != "show-instructions") hideInstructions();
+		if (e.path && !e.path.some(o => o.id == "font-selection")) hideFontSelector();
 	}
 
-	show_instructions();
-	m_hide_instrunction_timeout = setTimeout(() =>
+	showInstructions();
+	mHideInstructionTimeout = setTimeout(() =>
 	{
-		hide_instructions();
+		hideInstructions();
 	}, 5000);
 	
-	update_tabindex();
+	updateTabindex();
 
 	let r = document.querySelector(":root");
 	let c = document.getElementById('pencil-colour');
 	let colour = getComputedStyle(r).getPropertyValue('--colour').trim();
 	c.value = colour;
 }
+
+export default {
+		onSetMovement,
+		onSetThac,
+		onSetLevel,
+		onSetSpheres,
+		changeImageURL,
+		closeModal,
+		changePencilColor,
+		updateSpellListMode,
+		updateFont,
+		showFontSelector,
+		updateGearWeight,
+		updatePlayerAid,
+		updatePrinterFriendly,
+		updateStrength,
+		onDragEnter,
+		onDrop,
+		showFontSelector,
+		showInstructions,
+		updateAbility,
+	}

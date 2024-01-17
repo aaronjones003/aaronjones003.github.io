@@ -1,29 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<link href="sheet.css" rel="stylesheet" id="the-sheet">
-	<script src="sheet.js"></script>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0..1,0" />
+	<script type="module">
+		import scripts from "./sheet.js";
+		window.scripts = scripts;
+	</script>
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0..1,0" />
 </head>
-<body ondragenter="on_drag_enter(event);" ondragover="on_drag_enter(event);" ondrop="on_drop(event);" ondragleave="on_drag_leave(event);">
 
-	<div id="modal-bg" onclick="close_modal(event)" class='no-print'></div>
-    <div id='url-modal' class='modal'>
-        <p>Enter URL</p>
-        <input class='non-serialized' id='url' value="http://" onchange="close_modal(event)" onkeyup="if (event.key == 'Enter') { close_modal(event) }"/>
-    </div>
+<body ondragenter="window.scripts.onDragEnter(event);" ondragover="window.scripts.onDragEnter(event);" ondrop="window.scripts.onDrop(event);"
+	ondragleave="on_drag_leave(event);">
+
+	<div id="modal-bg" onclick="window.scripts.closeModal(event)" class='no-print'></div>
+	<div id='url-modal' class='modal'>
+		<p>Enter URL</p>
+		<input class='non-serialized' id='url' value="http://" onchange="window.scripts.closeModal(event)"
+			onkeyup="if (event.key == 'Enter') { window.scripts.closeModal(event) }" />
+	</div>
 	<div id="menu" class='no-print'>
-		<div id="save" onclick='save()' class='show-tooltip'>
+		<div id="save" onclick='window.scripts.save()' class='show-tooltip'>
 			<span class="material-symbols-outlined">save</span>
-			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>save character sheet</div>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>save character sheet
+			</div>
 		</div>
 		<div id="printer-friendly" class='show-tooltip'>
-			<input type=checkbox onchange="update_printer_friendly(event)"></input>
-			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>printer friendly mode</div>
+			<input type=checkbox onchange="window.scripts.updatePrinterFriendly(event)"></input>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>printer friendly mode
+			</div>
 		</div>
-		<div id="font-selection" onclick='show_font_selector()' class='show-tooltip'>
+		<div id="font-selection" onclick='window.scripts.showFontSelector()' class='show-tooltip'>
 			<div id="font-list">
-				<select onchange="update_font(event)" id="font-selector">
+				<select onchange="window.scripts.updateFont(event)" id="font-selector">
 					<option>Default</option>
 					<option>Indie Flower</option>
 					<option>Garamond</option>
@@ -34,14 +44,17 @@
 			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>select font</div>
 		</div>
 		<div id="colour-selection" class='show-tooltip'>
-			<input id="pencil-colour" type="color" onchange='change_pencil_colour(event)' oninput='change_pencil_colour(event)'></input>
-			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>select pencil colour</div>
+			<input id="pencil-colour" type="color" onchange='window.scripts.changePencilColour(event)'
+				oninput='window.scripts.changePencilColour(event)'></input>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>select pencil colour
+			</div>
 		</div>
 		<div id="show-player-aid" class='show-tooltip'>
-			<input type=checkbox onchange="update_player_aid(event)" checked></input>
-			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>Show/Hide player aid notes</div>
+			<input type=checkbox onchange="window.scripts.updatePlayerAid(event)" checked></input>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>Show/Hide player aid
+				notes</div>
 		</div>
-		<div id="show-instructions" onclick='show_instructions()' class='show-tooltip'>
+		<div id="show-instructions" onclick='window.scripts.showInstructions()' class='show-tooltip'>
 			<span class="material-symbols-outlined no-click"><b>question_mark</b></span>
 			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>display help</div>
 		</div>
@@ -56,38 +69,66 @@
 	</div>
 
 	<div class=page>
-        <div id="player-aid">
-            <div id="help-saving-throws">
-                Roll over<br>
-                (The smaller the better)
-            </div>
-            <div id="help-ac">
-                The smaller the better<br>
-                (Starts from 10)
-            </div>
-            <div id="help-thac0">
-                The smaller the better
-                (THAC0 - roll = AC hit)
-            </div>
-            <div id="help-turning">
-                Roll over<br>
-                (The smaller<br>the better)
-            </div>
-            <div id="help-ability-checks">
-                Roll under<br>
-            </div>
-        </div>
+		<div id="player-aid">
+			<div id="help-saving-throws">
+				Roll over<br>
+				(The smaller the better)
+			</div>
+			<div id="help-ac">
+				The smaller the better<br>
+				(Starts from 10)
+			</div>
+			<div id="help-thac0">
+				The smaller the better
+				(THAC0 - roll = AC hit)
+			</div>
+			<div id="help-turning">
+				Roll over<br>
+				(The smaller<br>the better)
+			</div>
+			<div id="help-ability-checks">
+				Roll under<br>
+			</div>
+		</div>
 		<div id="character">
 			<table>
-				<tr><td colspan=2><div class='input'><label>Name</label><div><input type=text id="character-name"></input></div></div></td></tr>
-				<tr><td><div class='input'><label>Alignment</label><div><input type='text'/></div></div></td><td><div class='input'><label>Race</label><div><input type='text'/></div></div></td></tr>
-				<tr><td><div class='input'><label>Class</label><div><input type='text' value="Cleric"/></div></div></td><td><div class='input'><label>Level</label><div><input type='text' id="level-input" onchange="on_set_level();"/></div></div></td></tr>
+				<tr>
+					<td colspan=2>
+						<div class='input'><label>Name</label>
+							<div><input type=text id="character-name"></input></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class='input'><label>Alignment</label>
+							<div><input type='text' /></div>
+						</div>
+					</td>
+					<td>
+						<div class='input'><label>Race</label>
+							<div><input type='text' /></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class='input'><label>Class</label>
+							<div><input type='text' value="Cleric" /></div>
+						</div>
+					</td>
+					<td>
+						<div class='input'><label>Level</label>
+							<div><input type='text' id="level-input" onchange="window.scripts.onSetLevel();" /></div>
+						</div>
+					</td>
+				</tr>
 			</table>
 		</div>
 		<div id="logo">
 			<img src="adnd2-bw.png" class="non-serialized">
 		</div>
-		
+
 		<!--
 		<div id="abilities">
 			<table vertical-tabindex>
@@ -110,51 +151,127 @@
 
 		<div id="abilities">
 			<table vertical-tabindex>
-				<tr><td><input type=text onchange='update_ability(event);'></input></td><td>STR</td>
+				<tr>
+					<td><input type=text onchange='window.scripts.updateAbility(event);'></input></td>
+					<td>STR</td>
 					<td>
 						<table>
-							<tr><td>Hit prob</td><td>Dmg adj</td><td>Wt Allow</td><td>Max press</td><td>Open door</td><td>Bb/Lg</td></tr>
-							<tr><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td></tr>
+							<tr>
+								<td>Hit prob</td>
+								<td>Dmg adj</td>
+								<td>Wt Allow</td>
+								<td>Max press</td>
+								<td>Open door</td>
+								<td>Bb/Lg</td>
+							</tr>
+							<tr>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+							</tr>
 						</table>
 					</td>
 				</tr>
-				<tr><td><input type=text onchange='update_ability(event);'></input></td><td>DEX</td>
+				<tr>
+					<td><input type=text onchange='window.scripts.updateAbility(event);'></input></td>
+					<td>DEX</td>
 					<td>
 						<table>
-							<tr><td>Rctn adj</td><td>Missile atk adj</td><td>Def adj</td></tr>
-							<tr><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td></tr>
+							<tr>
+								<td>Rctn adj</td>
+								<td>Missile atk adj</td>
+								<td>Def adj</td>
+							</tr>
+							<tr>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+							</tr>
 						</table>
 					</td>
 				</tr>
-				<tr><td><input type=text onchange='update_ability(event);'></input></td><td>CON</td>
+				<tr>
+					<td><input type=text onchange='window.scripts.updateAbility(event);'></input></td>
+					<td>CON</td>
 					<td>
 						<table>
-							<tr><td>HP adj</td><td>Sys shock</td><td>Res sur</td><td>Pois save</td><td>Regen</td></tr>
-							<tr><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td></tr>
+							<tr>
+								<td>HP adj</td>
+								<td>Sys shock</td>
+								<td>Res sur</td>
+								<td>Pois save</td>
+								<td>Regen</td>
+							</tr>
+							<tr>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+							</tr>
 						</table>
 					</td>
 				</tr>
-				<tr><td><input type=text onchange='update_ability(event);'></input></td><td>INT</td>
+				<tr>
+					<td><input type=text onchange='window.scripts.updateAbility(event);'></input></td>
+					<td>INT</td>
 					<td>
 						<table>
-							<tr><td># Lang</td><td>Spell level</td><td>Lrn spell</td><td>Spells/level</td><td>Spell immun</td></tr>
-							<tr><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td></tr>
+							<tr>
+								<td># Lang</td>
+								<td>Spell level</td>
+								<td>Lrn spell</td>
+								<td>Spells/level</td>
+								<td>Spell immun</td>
+							</tr>
+							<tr>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+							</tr>
 						</table>
 					</td>
 				</tr>
-				<tr><td><input type=text onchange='update_ability(event);'></input></td><td>WIS</td>
+				<tr>
+					<td><input type=text onchange='window.scripts.updateAbility(event);'></input></td>
+					<td>WIS</td>
 					<td>
 						<table>
-							<tr><td>Mag def adj</td><td>Bonus spells</td><td>Spell fail</td><td>Spell immun</td></tr>
-							<tr><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td></tr>
+							<tr>
+								<td>Mag def adj</td>
+								<td>Bonus spells</td>
+								<td>Spell fail</td>
+								<td>Spell immun</td>
+							</tr>
+							<tr>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+							</tr>
 						</table>
 					</td>
 				</tr>
-				<tr><td><input type=text onchange='update_ability(event);'></input></td><td>CHA</td>
+				<tr>
+					<td><input type=text onchange='window.scripts.updateAbility(event);'></input></td>
+					<td>CHA</td>
 					<td>
 						<table>
-							<tr><td>Max henchmen</td><td>Loyalty base</td><td>Rctn adj</td></tr>
-							<tr><td><input type='text'/></td><td><input type='text'/></td><td><input type='text'/></td></tr>
+							<tr>
+								<td>Max henchmen</td>
+								<td>Loyalty base</td>
+								<td>Rctn adj</td>
+							</tr>
+							<tr>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+								<td><input type='text' /></td>
+							</tr>
 						</table>
 					</td>
 				</tr>
@@ -163,40 +280,142 @@
 
 		<div id="movement">
 			<table>
-				<tr><td colspan=2>Base rate</td><td><input type=text id=base-movement onchange="on_set_movement();"></input></tr>
-				<tr><td>Light</td><td>(<input type='text'/>)</td><td><input type='text'/></td></tr>
-				<tr><td>Mod</td><td>(<input type='text'/>)</td><td><input type='text'/></td></tr>
-				<tr><td>Hvy</td><td>(<input type='text'/>)</td><td><input type='text'/></td></tr>
-				<tr><td>Svr</td><td>(<input type='text'/>)</td><td><input type='text'/></td></tr>
-				<tr><td>Jog</td><td>(<input type=text value="X2" disabled></input>)</td><td><input type='text'/></td></tr>
-				<tr><td>Run</td><td>(<input type=text value="X3" disabled></input>)</td><td><input type='text'/></td></tr>
-				<tr><td>Run</td><td>(<input type=text value="X4" disabled></input>)</td><td><input type='text'/></td></tr>
-				<tr><td>Run</td><td>(<input type=text value="X5" disabled></input>)</td><td><input type='text'/></td></tr>
+				<tr>
+					<td colspan=2>Base rate</td>
+					<td><input type=text id=base-movement onchange="window.scripts.onSetMovement();"></input>
+				</tr>
+				<tr>
+					<td>Light</td>
+					<td>(<input type='text' />)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Mod</td>
+					<td>(<input type='text' />)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Hvy</td>
+					<td>(<input type='text' />)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Svr</td>
+					<td>(<input type='text' />)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Jog</td>
+					<td>(<input type=text value="X2" disabled></input>)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Run</td>
+					<td>(<input type=text value="X3" disabled></input>)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Run</td>
+					<td>(<input type=text value="X4" disabled></input>)</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Run</td>
+					<td>(<input type=text value="X5" disabled></input>)</td>
+					<td><input type='text' /></td>
+				</tr>
 			</table>
 		</div>
 		<div id="saving-throws">
 			<table vertical-tabindex reverse-vertical>
-				<tr><td><input type='text'/></td><td>Paralization/<br>Poison</td><td><input type='text'/></td></tr>
-				<tr><td><input type='text'/></td><td>Rod, Staff,<br> or Wand</td><td><input type='text'/></td></tr>
-				<tr><td><input type='text'/></td><td>Petrification/<br>Polymorph</td><td><input type='text'/></td></tr>
-				<tr><td><input type='text'/></td><td>Breath<br>Weapon</td><td><input type='text'/></td></tr>
-				<tr><td><input type='text'/></td><td>Spells</td><td><input type='text'/></td></tr>
-				<tr><td>Modifier</td><td></td><td>Save</td></tr>
+				<tr>
+					<td><input type='text' /></td>
+					<td>Paralization/<br>Poison</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td><input type='text' /></td>
+					<td>Rod, Staff,<br> or Wand</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td><input type='text' /></td>
+					<td>Petrification/<br>Polymorph</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td><input type='text' /></td>
+					<td>Breath<br>Weapon</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td><input type='text' /></td>
+					<td>Spells</td>
+					<td><input type='text' /></td>
+				</tr>
+				<tr>
+					<td>Modifier</td>
+					<td></td>
+					<td>Save</td>
+				</tr>
 			</table>
 		</div>
 		<div id="ac">
 			<table>
-				<tr><td rowspan=4 class=shield>AC<input type='text'/></td><td>Adjusted AC</td><td>Armor type (pieces)</td></tr>
-				<tr><td><div class='input'><label>Surprised</label><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td></tr>
-				<tr><td><div class='input'><label>Shieldless</label><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td></tr>
-				<tr><td><div class='input'><label>Rear</label><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td></tr>
-				<tr><td colspan=3><div class='input'><label>Defenses</label><div><input type='text'/></div></div></td></tr>
+				<tr>
+					<td rowspan=4 class=shield>AC<input type='text' /></td>
+					<td>Adjusted AC</td>
+					<td>Armor type (pieces)</td>
+				</tr>
+				<tr>
+					<td>
+						<div class='input'><label>Surprised</label>
+							<div><input type='text' /></div>
+						</div>
+					</td>
+					<td>
+						<div><input type='text' /></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class='input'><label>Shieldless</label>
+							<div><input type='text' /></div>
+						</div>
+					</td>
+					<td>
+						<div><input type='text' /></div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class='input'><label>Rear</label>
+							<div><input type='text' /></div>
+						</div>
+					</td>
+					<td>
+						<div><input type='text' /></div>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=3>
+						<div class='input'><label>Defenses</label>
+							<div><input type='text' /></div>
+						</div>
+					</td>
+				</tr>
 			</table>
 		</div>
 		<div id="hp">
 			<table>
-				<tr><td>HIT POINTS</td><td>Wounds</td></tr>
-				<tr><td><input type='text'/></td><td><textarea></textarea></td></tr>
+				<tr>
+					<td>HIT POINTS</td>
+					<td>Wounds</td>
+				</tr>
+				<tr>
+					<td><input type='text' /></td>
+					<td><textarea></textarea></td>
+				</tr>
 			</table>
 		</div>
 		<div id="thac">
@@ -229,43 +448,284 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td><div>To Hit #</div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div><input id="thac0-input" type='text' onchange="on_set_thac();"/></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
-						<td><div></div></td>
+						<td>
+							<div>To Hit #</div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div><input id="thac0-input" type='text' onchange="window.scripts.onSetThac();" /></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
+						<td>
+							<div></div>
+						</td>
 				</tbody>
 			</table>
 		</div>
 		<div id="weapons">
 			<table>
 				<thead>
-					<tr><th>Weapon</th><th>#AT</th><th>Attack adj / Dmg adj</th><th>THAC0</th><th>Damage (SM/L)</th><th>Range</th><th>Weight</th><th>Size</th><th>Type</th><th>Speed</th></tr>
+					<tr>
+						<th>Weapon</th>
+						<th>#AT</th>
+						<th>Attack adj / Dmg adj</th>
+						<th>THAC0</th>
+						<th>Damage (SM/L)</th>
+						<th>Range</th>
+						<th>Weight</th>
+						<th>Size</th>
+						<th>Type</th>
+						<th>Speed</th>
+					</tr>
 				</thead>
 				<tbody>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></td>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></td>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></td>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></td>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></td>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/>/<input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td></td>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' />/<input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						</td>
 				</tbody>
 			</table>
 		</div>
@@ -309,19 +769,19 @@
 		<div id="turning">
 			<table>
 				<tr>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
 				</tr>
 				<tr>
 					<td>Skeleton<br>or 1 HD</td>
@@ -343,15 +803,15 @@
 		<div id="spells">
 			<table>
 				<tr>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
-					<td><input type='text'/></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
+					<td><input type='text' /></td>
 				</tr>
 				<tr>
 					<td>1st</td>
@@ -385,29 +845,129 @@
 		<div id="proficiencies">
 			<table vertical-tabindex>
 				<thead>
-					<tr><th>Non-weapon proficiencies</th><th>Non-weapon proficiencies</th><th>Non-weapon proficiencies</th><th>Weapon proficiencies</th></tr>
+					<tr>
+						<th>Non-weapon proficiencies</th>
+						<th>Non-weapon proficiencies</th>
+						<th>Non-weapon proficiencies</th>
+						<th>Weapon proficiencies</th>
+					</tr>
 				</thead>
 				<tbody>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
-					<tr><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/>(<input type='text'/>/<input type='text'/>)</span></div></td><td><div><span><input type='text'/></span></div></td></tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' />(<input type='text' />/<input type='text' />)</span></div>
+						</td>
+						<td>
+							<div><span><input type='text' /></span></div>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
 		<div id="xp">
 			<table>
 				<thead>
-					<tr><th colspan=2>Experience</th></tr>
+					<tr>
+						<th colspan=2>Experience</th>
+					</tr>
 				</thead>
 				<tbody>
-					<tr><td colspan=2><input type=text id='total-xp'></input></td></tr>
 					<tr>
-						<td><label>Next level</label><span><input type='text'/></span></td>
-						<td id='bonus-xp'><label>Bonus</label><span><input type='text'/></span></td>
+						<td colspan=2><input type=text id='total-xp'></input></td>
+					</tr>
+					<tr>
+						<td><label>Next level</label><span><input type='text' /></span></td>
+						<td id='bonus-xp'><label>Bonus</label><span><input type='text' /></span></td>
 					</tr>
 				</tbody>
 			</table>
@@ -415,120 +975,1915 @@
 		<div id="money">
 			<table vertical-tabindex>
 				<thead>
-					<tr><th>Coins</th><th>Gems</th></tr>
+					<tr>
+						<th>Coins</th>
+						<th>Gems</th>
+					</tr>
 				</thead>
 				<tbody>
-					<tr><td><label>Gold</label><span><input type='text'/></span></td><td rowspan=3><textarea></textarea></td></tr>
-					<tr><td><label>Silver</label><span><input type='text'/></span></td></tr>
-					<tr><td><label>Copper</label><span><input type='text'/></span></td></tr>
+					<tr>
+						<td><label>Gold</label><span><input type='text' /></span></td>
+						<td rowspan=3><textarea></textarea></td>
+					</tr>
+					<tr>
+						<td><label>Silver</label><span><input type='text' /></span></td>
+					</tr>
+					<tr>
+						<td><label>Copper</label><span><input type='text' /></span></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div id="spheres">
+			<table vertical-tabindex>
+				<thead>
+					<tr>
+						<th>Spheres: Major</th>
+						<th>Minor</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<textarea id="major-spheres-input" onchange="window.scripts.onSetSpheres();"></textarea>
+						</td>
+						<td>
+							<textarea id="minor-spheres-input" onchange="window.scripts.onSetSpheres();"></textarea>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 
 	<div class=page>
-        <div id="help" class="no-print">
-            <div id="help-portrait">
-                &#129048; Mouse over here for setting the portrait URL<br>
-            </div>
-        </div>
+		<div id="help" class="no-print">
+			<div id="help-portrait">
+				&#129048; Mouse over here for setting the portrait URL<br>
+			</div>
+		</div>
 		<div id="gear">
 			<table>
 				<thead>
-					<tr><th>Item</th><th>Location</th><th>Weight</th></tr>
+					<tr>
+						<th>Item</th>
+						<th>Location</th>
+						<th>Weight</th>
+					</tr>
 				</thead>
 				<tbody>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td><div class='input'><div><input type='text'/></div></div></td><td><div><input type='text'/></div></td><td><div><input type=text onchange="update_gear_weight()"></input></div></td></td>
-					<tr><td colspan=2>Total weight</td><td id='gear-total-weight'></td></td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td>
+							<div class='input'>
+								<div><input type='text' /></div>
+							</div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type=text onchange="window.scripts.updateGearWeight()"></input></div>
+						</td>
+						</td>
+					<tr>
+						<td colspan=2>Total weight</td>
+						<td id='gear-total-weight'></td>
+						</td>
 				</tbody>
 			</table>
 		</div>
 		<div id="notes">
 			<table>
 				<thead>
-					<tr><th>Notes</th></tr>
+					<tr>
+						<th>Notes</th>
+					</tr>
 				</thead>
 				<tbody>
-					<td><textarea></textarea></td></tr>
+					<td><textarea></textarea></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
-        <div id="portrait">
-            <div id="edit-image" class="no-print" onclick="change_image_url(event)"></div>
-            <img id="portrait-image"/>
-        </div>
+		<div id="portrait">
+			<div id="edit-image" class="no-print" onclick="window.scripts.changeImageURL(event)"></div>
+			<img id="portrait-image" />
+		</div>
 		<div id="spell-list">
 			<div class="tooltip-container show-tooltip">
-				<input type=checkbox id='spell-list-edit' class='no-print' onchange="update_spell_list_mode()" checked></input>
-				<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>click to change between edit and play mode</div>
+				<input type=checkbox id='spell-list-edit' class='no-print' onchange="window.scripts.updateSpellListMode()"
+					checked></input>
+				<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>click to change
+					between edit and play mode</div>
 			</div>
 			<table vertical-tabindex=7>
-				<col><col><col><col><col><col><col><col><col><col><col><col><col><col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
+				<col>
 				<thead>
-					<tr><th colspan=14>Spells</th></tr>
+					<tr>
+						<th colspan=14>Spells</th>
+					</tr>
 				</thead>
 				<tbody>
-					<tr><th>Spell</th><th>Level</th><th>Sp.</th><th>R</th><th>V</th><th>S</th><th>M</th><th>Spell</th><th>Level</th><th>Sp.</th><th>R</th><th>V</th><th>S</th><th>M</th></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
-					<tr><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><div><input type='text'/></div></td><td><input type='checkbox'/></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td><td><div><input type='checkbox'/></div></td></tr>
+					<tr>
+						<th>Spell</th>
+						<th>Level</th>
+						<th>Sp.</th>
+						<th>R</th>
+						<th>V</th>
+						<th>S</th>
+						<th>M</th>
+						<th>Spell</th>
+						<th>Level</th>
+						<th>Sp.</th>
+						<th>R</th>
+						<th>V</th>
+						<th>S</th>
+						<th>M</th>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td>
+							<div><input type='text' /></div>
+						</td>
+						<td><input type='checkbox' /></td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+						<td>
+							<div><input type='checkbox' /></div>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
 </body>
+
 </html>

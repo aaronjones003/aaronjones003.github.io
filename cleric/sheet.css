@@ -994,7 +994,8 @@ div.input
 	border: 1pt solid black;
 	font-size: 6.5pt;
 	margin-top: 0.5cm;
-	width: 49%;
+	margin-right: 0.1cm;
+	width: 32%;
 	height: 2.6cm;
 }
 #xp table
@@ -1055,11 +1056,12 @@ div.input
 }
 #money
 {
-	float: right;
+	float: left;
 	border: 1pt solid black;
 	font-size: 6.5pt;
 	margin-top: 0.5cm;
-	width: 49%;
+	margin-right: 0.1cm;
+	width: 33%;
 	height: 2.6cm;
 }
 #money table
@@ -1116,6 +1118,49 @@ div.input
 	border: 0;
 	resize: none;
 	font-size: 12pt;
+}
+#spheres
+{
+	float: right;
+	border: 1pt solid black;
+	font-size: 6.5pt;
+	margin-top: 0.5cm;
+	width: 33%;
+	height: 2.6cm;
+}
+#spheres table
+{
+	border-collapse: collapse;
+	height: 100%;
+	width: 100%;
+}
+#spheres tr
+{
+	vertical-align: top;
+}
+#spheres td:nth-child(1), #spheres th:nth-child(1)
+{
+	border-right: 1pt solid black;
+	text-align: center;
+	width: 3.5cm;
+}
+#spheres td
+{
+	padding: 0.5mm 2mm;
+}
+#spheres th
+{
+	font-size: 8pt;
+	height: 0;
+}
+#spheres textarea
+{
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+	border: 0;
+	resize: none;
+	font-size: 10pt;
 }
 #gear
 {
@@ -1334,7 +1379,8 @@ div.input
 	width: 6pt;
 	height: 6pt;
 	cursor: pointer;
-	transform: translate(2pt, 0);
+	font-size: 8pt;
+	transform: translate(2pt, 2pt);
 }
 #spell-list td:nth-child(7n+5) input[type=checkbox]:checked:after
 {
@@ -1364,6 +1410,7 @@ div.input
 	width: 100%;
 	border: 0;
 	text-align: left;
+    text-transform: capitalize;
 }
 #spell-list div
 {
