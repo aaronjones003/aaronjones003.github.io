@@ -39,6 +39,10 @@
 	}
 }
 
+.display-none {
+	display: none;
+}
+
 .page
 {
 	background: url("background.jpg");
@@ -46,7 +50,7 @@
 	position: relative;
 	width: 210mm;
 	height: 297.1mm;
-	margin: 1cm calc(50% - 105mm) auto calc(50% - 105mm);
+	/* margin: 1cm calc(50% - 105mm) auto calc(50% - 105mm); */
 	border: 1px #D3D3D3 solid;
 	border-radius: 5px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -63,11 +67,17 @@ html
 {
 	font-family: 'Averia Serif Libre';
 	font-size: 8pt;
+	background: white;
+
 }
-//div
-//{
-//	border-radius: 4pt;
-//}
+
+@media (prefers-color-scheme: dark) {
+	html
+	{
+		filter: invert(90%)
+	}
+}
+
 input, textarea
 {
 	color: var(--colour);
@@ -80,17 +90,18 @@ input, textarea
 .tooltip
 {
 	display: block !important;
-	width: 512px !important;
+	width:  max-content !important;
+	padding: 2px 2px !important;
 	color: black;
-	border: 0 !important;
+	border: 1px solid #bbbbbb !important;
+	border-radius: 4px;
 	position: absolute;
-	background: none;
+	background: white !important;
 	font-size: 10pt !important;
 	font-family: 'Averia Serif Libre' !important;
 	margin: 0 !important;
-	padding: 0 !important;
 	left: calc(100% + 16px);
-	top: -2px;
+	top: -8px;
 	overflow: visible !important;
 	transform: translate(0, 50%);
 	opacity: 0;
@@ -120,11 +131,36 @@ input, textarea
 #menu
 {
 	position: fixed;
+	/* overflow-y: hidden;
+	overflow-x: auto; */
+	top: -12px;
 	left: -8px;
-	border-radius: 5px;
+	border-bottom-right-radius: 16px;
 	border: 1px solid #0007;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 	width: 52px;
+	z-index: 10;
+	background-color: white;
+}
+#menu  #open-menu
+{
+	display: none;
+}
+#menu.collapsed
+{
+	max-height: 52px;
+}
+#menu.collapsed  #open-menu
+{
+	display: block;
+}
+#menu.collapsed  #close-menu
+{
+	display: none;
+}
+#menu.collapsed div
+{
+	display: none;
 }
 #menu div
 {
@@ -166,7 +202,7 @@ input, textarea
 	transform: translate(-100%, 0);
 	transition: transform 0.4s;
 }
-#save
+#open-menu, #close-menu, #save, #download, #upload
 {
 	position: relative;
 	width: 38px;

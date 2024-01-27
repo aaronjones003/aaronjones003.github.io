@@ -21,9 +21,36 @@
 			onkeyup="if (event.key == 'Enter') { window.scripts.closeModal(event) }" />
 	</div>
 	<div id="menu" class='no-print'>
+		<div id="open-menu" onclick='window.scripts.showMenu()' class='show-tooltip'>
+			<span class="material-symbols-outlined">menu</span>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>open menu
+			</div>
+		</div>
+		<div id="close-menu" onclick='window.scripts.hideMenu()' class='show-tooltip'>
+			<span class="material-symbols-outlined">close</span>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>close menu
+			</div>
+		</div>
 		<div id="save" onclick='window.scripts.save()' class='show-tooltip'>
 			<span class="material-symbols-outlined">save</span>
-			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>save character sheet
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>save to local storage
+			</div>
+		</div>
+		<div id="download" onclick='window.scripts.download()' class='show-tooltip'>
+			<span class="material-symbols-outlined">download</span>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>download to json
+			</div>
+		</div>
+		<div id="upload" class='show-tooltip'>
+			<input
+				type="file"
+				id="upload"
+				multiple
+				accept="application/json"
+				class="display-none" 
+			/>
+			<label for="upload" class="material-symbols-outlined">upload</label>
+			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>upload json
 			</div>
 		</div>
 		<div id="printer-friendly" class='show-tooltip'>
@@ -114,7 +141,7 @@
 				<tr>
 					<td>
 						<div class='input'><label>Class</label>
-							<div><input type='text' value="Cleric" /></div>
+							<div><input type='text' /></div>
 						</div>
 					</td>
 					<td>
@@ -1017,11 +1044,11 @@
 	</div>
 
 	<div class=page>
-		<div id="help" class="no-print">
+		<!-- <div id="help" class="no-print">
 			<div id="help-portrait">
 				&#129048; Mouse over here for setting the portrait URL<br>
 			</div>
-		</div>
+		</div> -->
 		<div id="gear">
 			<table>
 				<thead>

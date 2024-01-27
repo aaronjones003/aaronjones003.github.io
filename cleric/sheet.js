@@ -112,6 +112,18 @@ function findOwner(e)
 	return findOwner(e.parentElement);
 }
 
+function showMenu()
+{
+	let instructions = document.getElementById("menu");
+	instructions.classList.remove("collapsed");
+}
+
+function hideMenu()
+{
+	let instructions = document.getElementById("menu");
+	instructions.classList.add("collapsed");
+}
+
 function showInstructions()
 {
 	let instructions = document.getElementById("instructions");
@@ -130,8 +142,7 @@ function hideInstructions()
 	instructions.classList.add("hidden")
 }
 
-function save()
-{
+function generateCharacterJSON() {
 	var file = {}
 	let data = {};
 	
@@ -170,6 +181,20 @@ function save()
 	file.data = data;
 	file.font = font_list.value;
 	file.colour = c.value.trim();
+
+	return file;
+}
+
+function save()
+{
+	const file = generateCharacterJSON();
+	
+	localStorage.setItem("character", JSON.stringify(file));
+}
+
+function download()
+{
+	const file = generateCharacterJSON();
 	
 	let uri = encodeURI("data:application/json;charset=utf-8," + JSON.stringify(file));
 	uri = uri.replace(/#/g, '%23')
@@ -183,7 +208,7 @@ function save()
 	link.remove();
 }
 
-function load(file)
+function characterFromFile(file)
 {
 	let version = file.version
 	let data = file.data
@@ -241,6 +266,13 @@ function load(file)
     updateGearWeight();
 }
 
+function load() {
+	const file = JSON.parse(localStorage.getItem("character"));
+
+	console.log(file);
+	characterFromFile(file);
+}
+
 // function closeModal(e)
 // {
 // 	let bg = document.getElementById("modal-bg")
@@ -271,7 +303,7 @@ function onDrop(e)
     {
         let text = reader.result;
 		let data = JSON.parse(text)
-		load(data)
+		characterFromFile(data)
     });
     reader.readAsText(blob)
 }
@@ -719,7 +751,7 @@ function setFont(font)
 	r.style.setProperty('--font', font)
 }
 
-function changePencilColor(e)
+function changePencilColour(e)
 {
 	let c = document.getElementById('pencil-colour');
 	let r = document.querySelector(":root");
@@ -806,6 +838,8 @@ window.onload = function()
 	let c = document.getElementById('pencil-colour');
 	let colour = getComputedStyle(r).getPropertyValue('--colour').trim();
 	c.value = colour;
+
+	load();
 }
 
 export default {
@@ -815,7 +849,7 @@ export default {
 		onSetSpheres,
 		changeImageURL,
 		closeModal,
-		changePencilColor,
+		changePencilColour,
 		updateSpellListMode,
 		updateFont,
 		showFontSelector,
@@ -825,7 +859,14 @@ export default {
 		updateStrength,
 		onDragEnter,
 		onDrop,
+		showMenu,
+		hideMenu,
 		showFontSelector,
 		showInstructions,
+		hideInstructions,
 		updateAbility,
+		save,
+		load,
+		download,
+		characterFromFile
 	}
