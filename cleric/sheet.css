@@ -51,13 +51,10 @@
 	width: 210mm;
 	height: 297.1mm;
 	margin: 0 0 8px;
-	/* margin: 1cm calc(50% - 105mm) auto calc(50% - 105mm); */
 	border: 1px #D3D3D3 solid;
 	border-radius: 5px;
 	box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-//	overflow: hidden;
 	box-sizing: border-box;
-//	transition: margin 0.5s ease;
 	padding: 1cm;
 }
 .page.printer-friendly
