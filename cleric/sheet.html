@@ -45,12 +45,13 @@
 		<div id="upload" class='show-tooltip'>
 			<input
 				type="file"
-				id="upload"
+				id="upload-input"
 				multiple
 				accept="application/json"
 				class="display-none" 
+				onchange='window.scripts.upload()'
 			/>
-			<label for="upload" class="material-symbols-outlined">upload</label>
+			<label for="upload-input" class="material-symbols-outlined">upload</label>
 			<div class='tooltip no-print'><span class="material-symbols-outlined">arrow_left</span>upload json
 			</div>
 		</div>

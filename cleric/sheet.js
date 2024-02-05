@@ -48,8 +48,24 @@ function onSetLevel()
 	});
 }
 
-function addSpellsForSphere(spellsByLevel, existingSpells, sphere, major) {
+const sphereNameTransforms = {
+	elem: 'ELEMENTAL',
+    necro: 'NECROMANTIC',
+    necromancy: 'NECROMANTIC',
+};
+
+function addSpellsForSphere(spellsByLevel, existingSpells, origSphere, major) {
 	priestSpells.forEach(spell => {
+		let sphereWords = origSphere.trim().split(' ')
+		Object.entries(sphereNameTransforms).forEach(([match, replace]) => {
+			const regEx = new RegExp(match, "ig");
+			sphereWords = sphereWords.map(word => word.replaceAll(regEx, replace));
+		})
+
+		console.log(sphereWords)
+
+		const sphere = sphereWords.join(' ')
+
 		if (existingSpells.has(spell.spellName)) return;
 
 		if (spell.sphere === sphere.trim().toUpperCase() && (major || (spell.spellLevel <= 3))) {
@@ -67,7 +83,7 @@ function addSpellsForSphere(spellsByLevel, existingSpells, sphere, major) {
 function onSetSpheres()
 {
 	let majorInput = document.getElementById("major-spheres-input");
-	let majorSpheres = majorInput.value ? majorInput.value.split(',') : [];
+	let majorSpheres = majorInput.value ? [...majorInput.value.split(','), 'ALL'] : ['ALL'];
 	let minorInput = document.getElementById("minor-spheres-input");
 	let minorSpheres = minorInput.value ? minorInput.value.split(',') : [];
 	const spellsByLevel = {}
@@ -76,16 +92,15 @@ function onSetSpheres()
 	majorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, true));
 	minorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, false));
 	console.log(spellsByLevel);
+	const spheres = new Set(Object.values(spellsByLevel).flatMap(values => values.map(val => val.sphere)))
+	console.log(spheres);
 
 	const spellsList = Object.values(spellsByLevel).flatMap(values => values)
-
-	console.log(spellsList);
 
 	let spells = document.getElementById("spell-list");
 	let rows = spells.querySelectorAll("tbody tr");
 	const numRows = rows.length - 1
 	Array.from(rows).slice(1).forEach((row, i) => {
-		console.log(row)
 		if (spellsList[i]) {
 
 			row.children[0].children[0].children[0].value = spellsList[i].spellName.toLowerCase();
@@ -252,6 +267,14 @@ function characterFromFile(file)
 		{
 			element.checked = value;
 		}
+		else if (element.nodeName == "INPUT" && element.getAttribute("type") == "file")
+		{
+			// Ignore file uploads, this input isn't data we actually store.
+		}
+		else if (element.nodeName == "IMG")
+		{
+            setImage(element, value);
+		}
 		else if (element.nodeName == "IMG")
 		{
             setImage(element, value);
@@ -269,8 +292,18 @@ function characterFromFile(file)
 function load() {
 	const file = JSON.parse(localStorage.getItem("character"));
 
-	console.log(file);
 	characterFromFile(file);
+}
+
+function upload() {
+	const file = document.getElementById("upload-input").files[0];
+
+	file.text().then((text) => {
+		console.log(text)
+		
+		const file = JSON.parse(text);
+		characterFromFile(file)
+	});
 }
 
 // function closeModal(e)
@@ -868,5 +901,6 @@ export default {
 		save,
 		load,
 		download,
+		upload,
 		characterFromFile
 	}
