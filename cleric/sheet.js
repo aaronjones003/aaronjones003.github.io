@@ -1,10 +1,15 @@
 import priestSpells from "./priest-spells.js";
 import priestSpellSlots from "./priest-spell-slots.js";
+import priestSavingThrows from "./priest-saving-throws.js";
 
 let mHideInstructionTimeout = null;
 
 const Classes = {
 	CLERIC: 'CLERIC',
+}
+
+const Races = {
+	DWARF: 'DWARF',
 }
 
 function getLevel() {
@@ -23,6 +28,40 @@ function getClass() {
 
 function isCleric() {
 	return getClass() === Classes.CLERIC;
+}
+
+function getRace() {
+	const charRace = document.getElementById("character-race-input").value;
+	return Object.values(Races).find((val) => {
+		if (charRace.toUpperCase().includes(val)) {
+			return val;
+		}
+	}) || '';
+}
+
+function isDwarf() {
+	return getRace() === Races.DWARF;
+}
+
+function getSavingThrows() {
+	let savingThrows = [];
+	switch (getClass()) {
+		case Classes.CLERIC: {
+			savingThrows = priestSavingThrows[getLevel() - 1]
+		}
+	}
+
+	let savingMods = [0, 0, 0, 0, 0];
+	if (isDwarf()) {
+		// dwarves get bonus to poison, magical wands, staves, rods, and spells. CON / 3.5 rounded down
+		const conInput = document.getElementById("con-input");
+		const con = parseInt(conInput.value);
+		const bonus = Math.floor(con/3.5)
+		savingMods[0] += bonus
+		savingMods[1] += bonus
+		savingMods[4] += bonus
+	}
+	return [savingMods, savingThrows];
 }
 
 function onSetMovement()
@@ -46,7 +85,6 @@ function onSetThac()
 	let base = document.getElementById("thac0-input");
 	let thac0 = parseInt(base.value);
 	let tr = base.parentElement.parentElement.parentElement;
-	console.log(tr);
 	Array.from(tr.children).forEach((td, i) => {
 		// Skip first cell and input cell
 		if (i === 0 || i === 11) return;
@@ -71,13 +109,30 @@ function onSetLevel()
 	const spellSlots = getSpellSlots();
 	const spellsContainer = document.getElementById("spells");
 	const spellsRow = spellsContainer.children[0].children[0].children[0]
-	console.log(spellsRow)
 	Array.from(spellsRow.children).forEach((td, i) => {
-		console.log(spellSlots[i+1])
 		if (spellSlots[i+1]) {
 			td.children[0].value = spellSlots[i+1]
 		} else {
 			td.children[0].value = '-'
+		}
+	});
+
+	const [savingMods, savingThrows] = getSavingThrows();
+	const savingThrowsContainer = document.getElementById("saving-throws");
+	const savingThrowsTable = savingThrowsContainer.children[0].children[0]
+	console.log(savingThrowsTable)
+	Array.from(savingThrowsTable.children).forEach((tr, i) => {
+		if (!tr.children[0].children[0]) return;
+		
+		if (savingMods[i]) {
+			tr.children[0].children[0].value = savingMods[i]
+		} else {
+			tr.children[0].children[0].value = '-'
+		}
+		if (savingThrows[i]) {
+			tr.children[2].children[0].value = savingThrows[i]
+		} else {
+			tr.children[2].children[0].value = '-'
 		}
 	});
 }
@@ -98,8 +153,8 @@ function getSpellSlots() {
 		})
 	}
 	
-	const wisdomlInput = document.getElementById("wis-input");
-	const wisdom = parseInt(wisdomlInput.value);
+	const wisdomInput = document.getElementById("wis-input");
+	const wisdom = parseInt(wisdomInput.value);
 	const wisModifiers = mWisdom[wisdom-1][1]
 	wisModifiers.split(' ').forEach(mod => {
 		if (slots[mod]) {
@@ -118,8 +173,6 @@ function addSpellsForSphere(spellsByLevel, existingSpells, origSphere, major) {
 			const regEx = new RegExp(match, "ig");
 			sphereWords = sphereWords.map(word => word.replaceAll(regEx, replace));
 		})
-
-		console.log(sphereWords)
 
 		const sphere = sphereWords.join(' ')
 
@@ -148,10 +201,9 @@ function onSetSpheres()
 
 	majorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, true));
 	minorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, false));
-	const spheres = new Set(Object.values(spellsByLevel).flatMap(values => values.map(val => val.sphere)))
+	// const spheres = new Set(Object.values(spellsByLevel).flatMap(values => values.map(val => val.sphere)))
 
 	const spellsList = Object.entries(spellsByLevel).flatMap(([level, values]) => {
-		console.log(getSpellSlots()[level])
 		if (getSpellSlots()[level]) {
 			return values
 		} 
@@ -375,8 +427,6 @@ function upload() {
 	const file = document.getElementById("upload-input").files[0];
 
 	file.text().then((text) => {
-		console.log(text)
-		
 		const file = JSON.parse(text);
 		characterFromFile(file)
 	});
