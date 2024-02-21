@@ -1,6 +1,29 @@
 import priestSpells from "./priest-spells.js";
+import priestSpellSlots from "./priest-spell-slots.js";
 
 let mHideInstructionTimeout = null;
+
+const Classes = {
+	CLERIC: 'CLERIC',
+}
+
+function getLevel() {
+	const levelInput = document.getElementById("level-input");
+	return parseInt(levelInput.value);
+}
+
+function getClass() {
+	const charClass = document.getElementById("character-class-input").value;
+	return Object.values(Classes).find((val) => {
+		if (charClass.toUpperCase().includes(val)) {
+			return val;
+		}
+	}) || '';
+}
+
+function isCleric() {
+	return getClass() === Classes.CLERIC;
+}
 
 function onSetMovement()
 {
@@ -35,16 +58,27 @@ function onSetLevel()
 {
 
 	let levelInput = document.getElementById("level-input");
-	let turningLevel = parseInt(levelInput.value);
+	let charLevel = parseInt(levelInput.value);
 	let turningContainer = document.getElementById("turning");
-	console.log(turningContainer)
 	let turningRow = turningContainer.children[0].children[0].children[0];
-	console.log(turningRow)
 	Array.from(turningRow.children).forEach((td, i) => {
-		if (turningLevel > turningTable.length) {
-			turningLevel = turningTable.length;
+		if (charLevel > turningTable.length) {
+			charLevel = turningTable.length;
 		}
-		td.children[0].value = turningTable[turningLevel - 1][i];
+		td.children[0].value = turningTable[charLevel - 1][i];
+	});
+
+	const spellSlots = getSpellSlots();
+	const spellsContainer = document.getElementById("spells");
+	const spellsRow = spellsContainer.children[0].children[0].children[0]
+	console.log(spellsRow)
+	Array.from(spellsRow.children).forEach((td, i) => {
+		console.log(spellSlots[i+1])
+		if (spellSlots[i+1]) {
+			td.children[0].value = spellSlots[i+1]
+		} else {
+			td.children[0].value = '-'
+		}
 	});
 }
 
@@ -53,6 +87,29 @@ const sphereNameTransforms = {
     necro: 'NECROMANTIC',
     necromancy: 'NECROMANTIC',
 };
+
+function getSpellSlots() {
+	const charLevel = getLevel();
+
+	const slots = {}
+	if (isCleric()) {
+		priestSpellSlots[charLevel-1].forEach((val, i) => {
+			slots[i+1] = val;
+		})
+	}
+	
+	const wisdomlInput = document.getElementById("wis-input");
+	const wisdom = parseInt(wisdomlInput.value);
+	const wisModifiers = mWisdom[wisdom-1][1]
+	wisModifiers.split(' ').forEach(mod => {
+		if (slots[mod]) {
+			slots[mod] += 1;
+		}
+	})
+
+	return slots;
+	
+}
 
 function addSpellsForSphere(spellsByLevel, existingSpells, origSphere, major) {
 	priestSpells.forEach(spell => {
@@ -91,14 +148,18 @@ function onSetSpheres()
 
 	majorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, true));
 	minorSpheres?.forEach(sphere => addSpellsForSphere(spellsByLevel, existingSpells, sphere, false));
-	console.log(spellsByLevel);
 	const spheres = new Set(Object.values(spellsByLevel).flatMap(values => values.map(val => val.sphere)))
-	console.log(spheres);
 
-	const spellsList = Object.values(spellsByLevel).flatMap(values => values)
+	const spellsList = Object.entries(spellsByLevel).flatMap(([level, values]) => {
+		console.log(getSpellSlots()[level])
+		if (getSpellSlots()[level]) {
+			return values
+		} 
+	})
 
 	let spells = document.getElementById("spell-list");
 	let rows = spells.querySelectorAll("tbody tr");
+
 	const numRows = rows.length - 1
 	Array.from(rows).slice(1).forEach((row, i) => {
 		if (spellsList[i]) {
@@ -108,6 +169,12 @@ function onSetSpheres()
 			row.children[4].children[0].children[0].checked = spellsList[i].components.includes('V');
 			row.children[5].children[0].children[0].checked = spellsList[i].components.includes('S');
 			row.children[6].children[0].children[0].checked = spellsList[i].components.includes('M');
+		} else {
+			row.children[0].children[0].children[0].value = '';
+			row.children[1].children[0].children[0].value = '';
+			row.children[4].children[0].children[0].checked = false;
+			row.children[5].children[0].children[0].checked = false;
+			row.children[6].children[0].children[0].checked = false;
 		}
 		if (spellsList[i + numRows]) {
 			row.children[7].children[0].children[0].value = spellsList[i + numRows].spellName.toLowerCase();
@@ -115,7 +182,14 @@ function onSetSpheres()
 			row.children[11].children[0].children[0].checked = spellsList[i].components.includes('V');
 			row.children[12].children[0].children[0].checked = spellsList[i].components.includes('S');
 			row.children[13].children[0].children[0].checked = spellsList[i].components.includes('M');
+		} else {
+			row.children[7].children[0].children[0].value = '';
+			row.children[8].children[0].children[0].value = '';
+			row.children[11].children[0].children[0].checked = false;
+			row.children[12].children[0].children[0].checked = false;
+			row.children[13].children[0].children[0].checked = false;
 		}
+		
 	})
 }
 
@@ -287,6 +361,8 @@ function characterFromFile(file)
 
 	hideInstructions();
     updateGearWeight();
+	onSetThac();
+	onSetSpheres();
 }
 
 function load() {
