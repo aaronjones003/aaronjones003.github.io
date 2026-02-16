@@ -23,12 +23,23 @@
 - Maintain mobile-first responsive design
 - Use the established component patterns in `src/components/`
 
+## Deployment Workflow
+
+**CRITICAL: Always run before committing and pushing changes:**
+
+1. Build the site: `npm run build`
+2. Deploy to GitHub Pages: `npm run deploy`
+3. Then commit and push source changes to main branch
+
+This ensures GitHub Pages always has the latest built version deployed to the `gh-pages` branch.
+
 ## File Organization
 
 - `src/pages/` — Page components (Home, Projects, ADnD)
 - `src/components/` — Reusable UI components (Header, Footer, etc.)
 - `src/styles/` — CSS and Tailwind configuration
 - `public/` — Static assets and favicon
+- `dist/` — Built files (generated, not committed)
 - `adnd2e/`, `cleric/` — Legacy AD&D character sheets (preserved for compatibility)
 
 ## Design System
