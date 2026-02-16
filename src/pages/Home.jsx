@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { Link } from 'preact-router';
 import { ArrowRight, Code, Palette, Gamepad2, ExternalLink, Github, BookOpen } from 'lucide-preact';
 

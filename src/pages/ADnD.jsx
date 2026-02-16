@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { Link } from 'preact-router';
 import { Sword, Scroll, Users, Wand2, ExternalLink } from 'lucide-preact';
 

@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { Github, Mail, Heart } from 'lucide-preact';
 
 export default function Footer() {

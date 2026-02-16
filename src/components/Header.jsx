@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { Link } from 'preact-router';
 import { useState, useEffect } from 'preact/hooks';
 import { Menu, X, Github, ExternalLink } from 'lucide-preact';

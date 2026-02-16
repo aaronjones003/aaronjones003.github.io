@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { Router, Route } from 'preact-router';
 
 // Components
