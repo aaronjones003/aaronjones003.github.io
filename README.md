@@ -28,7 +28,3 @@ This is a static site — open `index.html` in a browser to view locally. Change
 ## Deployment
 
 Hosted at: https://aaronjones003.github.io
-
-## AI Monorepo Integration
-
-This project is integrated as a submodule in the AI Monorepo for enhanced AI-assisted development. Changes made here can be pushed back to this repository independently.
