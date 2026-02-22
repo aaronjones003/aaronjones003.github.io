@@ -77,101 +77,94 @@ export default function Projects() {
             {projects.map((project, index) => {
               const Icon = getIcon(project.icon);
               return (
-                <div
-                  key={project.title}
-                  className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${
-                    index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-                  }`}
-                >
-                  <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                    <div className="card p-8 h-full">
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="p-3 bg-primary-50 rounded-lg">
-                          <Icon size={28} className="text-primary-600" />
-                        </div>
-                        {project.featured && (
-                          <span className="px-3 py-1 bg-primary-100 text-primary-700 text-sm font-medium rounded-full">
-                            Featured
-                          </span>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-4">
-                        <h3 className="text-2xl font-bold text-neutral-900">
-                          {project.title}
-                        </h3>
-                        
-                        <p className="text-neutral-600 leading-relaxed">
-                          {project.description}
-                        </p>
-                        
-                        <div className="flex flex-wrap gap-2">
-                          {project.tech.map((tech) => (
-                            <span
-                              key={tech}
-                              className="px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-md"
-                            >
-                              {tech}
-                            </span>
-                          ))}
-                        </div>
-                        
-                        <div className="flex space-x-4 pt-4">
-                          {project.href.startsWith('/') ? (
-                            <Link
-                              href={project.href}
-                              className="btn btn-primary"
-                            >
-                              <ExternalLink size={18} className="mr-2" />
-                              View Project
-                            </Link>
-                          ) : (
-                            <a
-                              href={project.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn btn-primary"
-                            >
-                              <ExternalLink size={18} className="mr-2" />
-                              Live Demo
-                            </a>
-                          )}
-                          {project.github && (
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn btn-secondary"
-                            >
-                              <Github size={18} className="mr-2" />
-                              Source
-                            </a>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
-                    <div className="relative group">
-                      <div className="aspect-video bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group-hover:shadow-xl transition-all duration-300">
-                        {project.image ? (
-                          <img
-                            src={project.image}
-                            alt={`${project.title} screenshot`}
-                            className="w-full h-full object-cover object-top"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
-                            <Icon size={64} className="text-primary-600 opacity-50" />
-                          </div>
-                        )}
-                      </div>
-                      {project.featured && (
-                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
-                          <span className="text-white text-xs font-bold">★</span>
+                <div key={project.title} className="card overflow-hidden">
+                  {/* Screenshot - Full width on mobile, side by side on desktop */}
+                  <div className="relative group">
+                    <div className="aspect-video bg-neutral-100 overflow-hidden border-b border-neutral-200 lg:border-none">
+                      {project.image ? (
+                        <img
+                          src={project.image}
+                          alt={`${project.title} screenshot`}
+                          className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                          <Icon size={64} className="text-primary-600 opacity-50" />
                         </div>
                       )}
+                    </div>
+                    {project.featured && (
+                      <div className="absolute top-4 right-4 w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center shadow-lg">
+                        <span className="text-white text-sm font-bold">★</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 lg:p-8">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="p-3 bg-primary-50 rounded-lg">
+                        <Icon size={24} className="text-primary-600" />
+                      </div>
+                      {project.featured && (
+                        <span className="px-3 py-1 bg-primary-100 text-primary-700 text-sm font-medium rounded-full">
+                          Featured
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-bold text-neutral-900">
+                        {project.title}
+                      </h3>
+
+                      <p className="text-neutral-600 leading-relaxed">
+                        {project.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2">
+                        {project.tech.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-3 py-1 bg-neutral-100 text-neutral-700 text-sm font-medium rounded-md"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        {project.href.startsWith('/') ? (
+                          <Link
+                            href={project.href}
+                            className="btn btn-primary"
+                          >
+                            <ExternalLink size={18} className="mr-2" />
+                            View Project
+                          </Link>
+                        ) : (
+                          <a
+                            href={project.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-primary"
+                          >
+                            <ExternalLink size={18} className="mr-2" />
+                            Live Demo
+                          </a>
+                        )}
+                        {project.github && (
+                          <a
+                            href={project.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn btn-secondary"
+                          >
+                            <Github size={18} className="mr-2" />
+                            Source
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
