@@ -10,6 +10,7 @@ export default function Projects() {
       href: 'https://thirsty.onigiri.zone',
       github: 'https://github.com/aaronjones003/thirsty',
       icon: Code,
+      image: '/screenshots/thirsty.png',
       featured: true,
     },
     {
@@ -19,6 +20,7 @@ export default function Projects() {
       href: 'https://onigiri.zone/py-ron/',
       github: 'https://github.com/aaronjones003/py-ron',
       icon: Palette,
+      image: '/screenshots/py-ron.png',
       featured: true,
     },
     {
@@ -28,6 +30,7 @@ export default function Projects() {
       href: 'https://onigiri.zone/a-box-of-mac-and-cheese/',
       github: 'https://github.com/aaronjones003/a-box-of-mac-and-cheese',
       icon: BookOpen,
+      image: '/screenshots/a-box-of-mac-and-cheese.png',
       featured: true,
     },
     {
@@ -36,6 +39,7 @@ export default function Projects() {
       tech: ['HTML', 'CSS', 'JavaScript'],
       href: '/adnd',
       icon: Sword,
+      image: '/screenshots/adnd.png',
       featured: false,
     },
   ];
@@ -149,9 +153,19 @@ export default function Projects() {
                   </div>
                   
                   <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
-                    <div className="relative">
-                      <div className="aspect-video bg-gradient-to-br from-primary-100 to-primary-200 rounded-xl flex items-center justify-center">
-                        <Icon size={64} className="text-primary-600 opacity-50" />
+                    <div className="relative group">
+                      <div className="aspect-video bg-neutral-100 rounded-xl overflow-hidden border border-neutral-200 shadow-sm group-hover:shadow-xl transition-all duration-300">
+                        {project.image ? (
+                          <img
+                            src={project.image}
+                            alt={`${project.title} screenshot`}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center">
+                            <Icon size={64} className="text-primary-600 opacity-50" />
+                          </div>
+                        )}
                       </div>
                       {project.featured && (
                         <div className="absolute -top-2 -right-2 w-6 h-6 bg-primary-600 rounded-full flex items-center justify-center">
