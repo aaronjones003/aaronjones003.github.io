@@ -43,6 +43,17 @@ const projects = [
     filename: 'a-box-of-mac-and-cheese.png',
     viewport: { width: 1280, height: 800 },
     async setup(page) {
+      // Inject the correct config before any scripts run
+      await page.addInitScript(() => {
+        window.CONFIG = {
+          API_INIT_ENDPOINT: 'https://2gotexgdyd.execute-api.us-east-1.amazonaws.com/default/aBoxOfMacAndCheeseInit',
+          API_STATUS_ENDPOINT: 'https://mcvwsqrip4.execute-api.us-east-1.amazonaws.com/default/aBoxOfMacAndCheeseStatus',
+          POLL_INTERVAL_MS: 3000,
+          MAX_POLLS: 60,
+          ENVIRONMENT: 'dev'
+        };
+      });
+
       // Listen for console messages to debug
       page.on('console', msg => console.log('  Browser console:', msg.text()));
 
