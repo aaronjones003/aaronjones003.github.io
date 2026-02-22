@@ -34,7 +34,7 @@ export default function Header() {
         ? 'bg-white/95 backdrop-blur-sm border-b border-neutral-200 shadow-sm' 
         : 'bg-white border-b border-neutral-200'
     }`}>
-      <div className="container">
+      <div className="container px-4">
         <nav className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
