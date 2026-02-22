@@ -7,6 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "deploy": "./scripts/deploy-manual.sh",
+    "deploy:validate": "./scripts/validate-deployment.sh",
     "deploy:old": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
