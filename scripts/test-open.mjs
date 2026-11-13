@@ -35,8 +35,10 @@ actions.manual(); assert.equal(attempts, 2);
 const browser = await chromium.launch({headless:true, ...(process.env.OPEN_CHROME ? {executablePath:process.env.OPEN_CHROME} : {})});
 try {
   const page = await browser.newPage({viewport:{width:390,height:844}});
-  const requests = [], errors = [];
+  const requests = [], errors = [], blockedByCsp = new Set(), responses = [];
   page.on('request', r => requests.push(r.url()));
+  page.on('requestfailed', r => { if (r.failure()?.errorText === 'csp') blockedByCsp.add(r.url()); });
+  page.on('response', r => responses.push(r.url()));
   page.on('pageerror', e => errors.push(e.message));
   await page.addInitScript(() => Object.defineProperty(navigator, 'clipboard', {value:{writeText:async()=>{throw Error('Denied');}}}));
   const origin = process.env.OPEN_TEST_ORIGIN || 'http://127.0.0.1:4178';
@@ -70,8 +72,11 @@ try {
   assert.equal(await page.evaluate(() => localStorage.length + sessionStorage.length), 0);
   assert.equal(await page.evaluate(async () => (await navigator.serviceWorker.getRegistrations()).length), 0);
   assert.deepEqual(errors, []);
-  const network = requests.filter(url => !url.startsWith('intent:'));
-  assert.equal(requests.length - network.length, 1);
+  const navigations = requests.filter(url => url.startsWith('intent:'));
+  assert.equal(navigations.length, 1);
+  // The hosting edge may inject analytics. CSP must block it before any network response.
+  const network = requests.filter(url => !url.startsWith('intent:') && !blockedByCsp.has(url));
+  assert.ok(responses.every(url => url.startsWith(origin + '/open/')));
   assert.ok(network.every(url => url.startsWith(origin + '/open/')), network.join('\n'));
   assert.ok(network.every(url => !url.includes('eid=') && !url.includes('authuser=')));
   console.log('PASS: validation, lossless fragments, manual-only fallback, one automatic attempt, clipboard failure, blocked launch, private requests, mobile controls.');
